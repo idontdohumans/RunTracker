@@ -11,7 +11,7 @@ import android.location.LocationManager;
 public class RunManager {
     public static final String TAG = "RunManager";
 
-    private static final String ACTION_LOCATION =
+    public static final String ACTION_LOCATION =
             "com.bignerdranch.android.runtracker.ACTION_LOCATION";
 
     private static RunManager sRunManager;
