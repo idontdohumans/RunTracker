@@ -140,4 +140,15 @@ public class RunManager {
     public boolean isTrackingRun(Run run) {
         return run != null && run.getId() == mCurrentRunId;
     }
+
+    public Location getLastLocationForRun(long runId) {
+        Location location = null;
+        RunDatabaseHelper.LocationCursor cursor = mHelper.queryLastLocationForRun(runId);
+        cursor.moveToFirst();
+        // If you got a row, get a location
+        if (!cursor.isAfterLast())
+            location = cursor.getLocation();
+        cursor.close();
+        return location;
+    }
 }
