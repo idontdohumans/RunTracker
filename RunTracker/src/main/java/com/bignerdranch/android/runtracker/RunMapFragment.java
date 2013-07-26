@@ -1,5 +1,6 @@
 package com.bignerdranch.android.runtracker;
 
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
@@ -16,7 +17,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.Date;
 
 /**
  * Created by panda on 7/26/13.
@@ -66,6 +70,26 @@ public class RunMapFragment extends SupportMapFragment
         while (!mLocationCursor.isAfterLast()) {
             Location loc = mLocationCursor.getLocation();
             LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+
+            Resources r = getResources();
+
+            // If this is the first location, add a marker for it
+            if (mLocationCursor.isFirst()) {
+                String startDate = new Date(loc.getTime()).toString();
+                MarkerOptions startMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(r.getString(R.string.run_start))
+                        .snippet(r.getString(R.string.run_started_at_format, startDate));
+                mGoogleMap.addMarker(startMarkerOptions);
+            } else if (mLocationCursor.isLast()) {
+                // If this is the last location, and not also the first, add a marker
+                String endDate = new Date(loc.getTime()).toString();
+                MarkerOptions finishMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(r.getString(R.string.run_finish))
+                        .snippet(r.getString(R.string.run_finished_at_format, endDate));
+                mGoogleMap.addMarker(finishMarkerOptions);
+            }
             line.add(latLng);
             latLngBuilder.include(latLng);
             mLocationCursor.moveToNext();
