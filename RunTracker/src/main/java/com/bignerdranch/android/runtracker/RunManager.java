@@ -91,7 +91,7 @@ public class RunManager {
     }
 
     public void stopRun() {
-        startLocationUpdates();
+        stopLocationUpdates();
         mCurrentRunId = -1;
         mPrefs.edit().remove(PREF_CURRENT_RUN_ID).commit();
     }
